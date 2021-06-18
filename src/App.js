@@ -3,9 +3,9 @@ import React, { Component } from "react";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
-import TodoList from "./components/TodoList";
-import initialTodos from "./todos.json";
-
+// import TodoList from "./components/TodoList";
+// import initialTodos from "./todos.json";
+import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
 //   { label: "green", color: "#4CAF50" },
@@ -17,7 +17,8 @@ import initialTodos from "./todos.json";
 
 class App extends Component {
   state = {
-    todos: initialTodos,
+    // todos: initialTodos,
+    inputValue: "",
   };
 
   deleteTodo = (todoId) => {
@@ -26,28 +27,33 @@ class App extends Component {
     }));
   };
 
-  render() {
-    const { todos } = this.state;
+  formSubmitHandler = (data) => {
+    console.log(data);
+  };
 
-    const totalTodoCount = todos.length;
-    const completedTodoCount = todos.reduce(
-      (total, todo) => (todo.completed ? total + 1 : total),
-      0
-    );
+  render() {
+    // const { todos } = this.state;
+
+    // const totalTodoCount = todos.length;
+    // const completedTodoCount = todos.reduce(
+    //   (total, todo) => (todo.completed ? total + 1 : total),
+    //   0
+    // );
 
     return (
       <>
-        <h1>Состояние компонента</h1>
+        <Form onSubmit={this.formSubmitHandler} />
+        {/* <h1>Состояние компонента</h1> */}
         {/* <ColorPicker options={colorPickerOptions} /> */}
         {/* <Dropdown /> */}
         {/* <Counter initialValue={0} /> */}
-
+        {/* 
         <div>
           <p>Общее количество: {totalTodoCount} </p>
           <p>Количество выполненых: {completedTodoCount}</p>
         </div>
 
-        <TodoList todos={todos} onDeleteTodo={this.deleteTodo} />
+        <TodoList todos={todos} onDeleteTodo={this.deleteTodo} /> */}
       </>
     );
   }
