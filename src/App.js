@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-// import React, { Component } from 'react';
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
-// import TodoList from "./components/TodoList";
-// import initialTodos from "./todos.json";
-import Form from "./components/form";
+import TodoList from "./components/TodoList";
+import initialTodos from "./todos.json";
+// import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
 //   { label: "green", color: "#4CAF50" },
@@ -17,7 +16,7 @@ import Form from "./components/form";
 
 class App extends Component {
   state = {
-    // todos: initialTodos,
+    todos: initialTodos,
     inputValue: "",
   };
 
@@ -27,33 +26,46 @@ class App extends Component {
     }));
   };
 
+  toggleCompleted = (todoId) => {
+    console.log(todoId);
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) =>
+        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
+      ),
+    }));
+  };
+
   formSubmitHandler = (data) => {
     console.log(data);
   };
 
   render() {
-    // const { todos } = this.state;
+    const { todos } = this.state;
 
-    // const totalTodoCount = todos.length;
-    // const completedTodoCount = todos.reduce(
-    //   (total, todo) => (todo.completed ? total + 1 : total),
-    //   0
-    // );
+    const totalTodoCount = todos.length;
+    const completedTodoCount = todos.reduce(
+      (total, todo) => (todo.completed ? total + 1 : total),
+      0
+    );
 
     return (
       <>
-        <Form onSubmit={this.formSubmitHandler} />
+        {/* <Form onSubmit={this.formSubmitHandler} /> */}
         {/* <h1>Состояние компонента</h1> */}
         {/* <ColorPicker options={colorPickerOptions} /> */}
         {/* <Dropdown /> */}
         {/* <Counter initialValue={0} /> */}
-        {/* 
+
         <div>
           <p>Общее количество: {totalTodoCount} </p>
           <p>Количество выполненых: {completedTodoCount}</p>
         </div>
 
-        <TodoList todos={todos} onDeleteTodo={this.deleteTodo} /> */}
+        <TodoList
+          todos={todos}
+          onDeleteTodo={this.deleteTodo}
+          ontoggleCompleted={this.toggleCompleted}
+        />
       </>
     );
   }
