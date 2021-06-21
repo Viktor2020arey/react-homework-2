@@ -1,9 +1,13 @@
 import React, { Component } from "react";
+import shortid from "shortid";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
 import TodoList from "./components/TodoList";
 import initialTodos from "./todos.json";
+
+import TodoEditor from "./components/TodoEditor";
+import Filter from "./components/TodoList/Filter";
 // import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
@@ -18,12 +22,29 @@ class App extends Component {
   state = {
     todos: initialTodos,
     inputValue: "",
+    filter: "",
+  };
+
+  addTodo = (text) => {
+    const todo = {
+      id: shortid.generate(),
+      text,
+      completed: false,
+    };
+
+    this.setState((todos) => ({
+      todos: [todo, ...todos],
+    }));
   };
 
   deleteTodo = (todoId) => {
     this.setState((prevState) => ({
       todos: prevState.todos.filter((todo) => todo.id !== todoId),
     }));
+  };
+
+  changeFilter = (e) => {
+    this.setState({ filter: e.currentTarget.value });
   };
 
   toggleCompleted = (todoId) => {
@@ -39,14 +60,32 @@ class App extends Component {
     console.log(data);
   };
 
-  render() {
+  getVisibleTodos = () => {
+    const { filter, todos } = this.state;
+
+    const normalizedFilter = filter.toLowerCase();
+
+    return todos.filter((todo) =>
+      todo.text.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  calculateCompletedTodos = () => {
     const { todos } = this.state;
 
-    const totalTodoCount = todos.length;
-    const completedTodoCount = todos.reduce(
+    return todos.reduce(
       (total, todo) => (todo.completed ? total + 1 : total),
       0
     );
+  };
+
+  render() {
+    const { todos, filter } = this.state;
+
+    const totalTodoCount = todos.length;
+    const completedTodoCount = this.calculateCompletedTodos();
+
+    const visibleTodos = this.getVisibleTodos();
 
     return (
       <>
@@ -56,13 +95,17 @@ class App extends Component {
         {/* <Dropdown /> */}
         {/* <Counter initialValue={0} /> */}
 
+        <TodoEditor onSubmit={this.addTodo} />
+
+        <Filter value={filter} onChange={this.changeFilter} />
+
         <div>
           <p>Общее количество: {totalTodoCount} </p>
           <p>Количество выполненых: {completedTodoCount}</p>
         </div>
 
         <TodoList
-          todos={todos}
+          todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           ontoggleCompleted={this.toggleCompleted}
         />
