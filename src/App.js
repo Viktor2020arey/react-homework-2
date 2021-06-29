@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import axios from "axios";
 import shortid from "shortid";
 import Container from "./components/Container";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
 import TodoList from "./components/TodoList";
-import initialTodos from "./todos.json";
+// import initialTodos from "./todos.json";
 
 import TodoEditor from "./components/TodoEditor";
 import Filter from "./components/TodoList/Filter";
@@ -26,21 +27,23 @@ import { ReactComponent as AddIcon } from "./components/icons/add.svg";
 
 class App extends Component {
   state = {
-    todos: initialTodos,
+    todos: [],
     inputValue: "",
     filter: "",
     showModal: false,
   };
 
   componentDidMount() {
-    console.log("App componentDidMount");
+    // console.log("App componentDidMount");
+    // const todos = localStorage.getItem("todos");
+    // const parsedTodos = JSON.parse(todos);
+    // if (parsedTodos) {
+    //   this.setState({ todos: parsedTodos });
+    // }
 
-    const todos = localStorage.getItem("todos");
-    const parsedTodos = JSON.parse(todos);
-
-    if (parsedTodos) {
-      this.setState({ todos: parsedTodos });
-    }
+    axios.get("http://localhost:3000/todos").then((response) => {
+      console.log(response.data);
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
