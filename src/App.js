@@ -4,13 +4,16 @@ import Container from "./components/Container";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
-// import TodoList from "./components/TodoList";
+import TodoList from "./components/TodoList";
 import initialTodos from "./todos.json";
 
-// import TodoEditor from "./components/TodoEditor";
-// import Filter from "./components/TodoList/Filter";
+import TodoEditor from "./components/TodoEditor";
+import Filter from "./components/TodoList/Filter";
 
 import Modal from "./components/Modal";
+
+import IconButton from "./components/IconButton";
+import { ReactComponent as AddIcon } from "./components/icons/add.svg";
 // import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
@@ -41,11 +44,16 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("App componentDidUpdate");
-    if (this.state.todos !== prevState.todos) {
-      console.log("Обновилось поле todos");
+    const nextTodos = this.state.todos;
+    const prevTodos = prevState.todos;
 
-      localStorage.setItem("todos", JSON.stringify(this.state.todos));
+    if (nextTodos !== prevTodos) {
+      console.log("Обновилось поле todos, записываю todos в хранилище");
+      localStorage.setItem("todos", JSON.stringify(nextTodos));
+    }
+
+    if (nextTodos.length > prevTodos.length && prevTodos.length !== 0) {
+      this.toggleModal();
     }
   }
 
@@ -59,6 +67,8 @@ class App extends Component {
     this.setState(({ todos }) => ({
       todos: [todo, ...todos],
     }));
+
+    // this.toggleModal();
   };
 
   deleteTodo = (todoId) => {
@@ -125,19 +135,18 @@ class App extends Component {
         {/* <Dropdown /> */}
         {/* <Counter initialValue={0} /> */}
 
+        <IconButton onClick={this.toggleModal} aria-label="Добавить тодо">
+          <AddIcon width="40" height="40" fill="#fff" />
+        </IconButton>
+
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <h1>Это контент Children</h1>
-            <button type="button" onClick={this.toggleModal}>
-              Закрыть
-            </button>
+            <TodoEditor onSubmit={this.addTodo} />
           </Modal>
         )}
         <button type="button" onClick={this.toggleModal}>
           Открыть модалку
         </button>
-
-        {/* <TodoEditor onSubmit={this.addTodo} />
 
         <Filter value={filter} onChange={this.changeFilter} />
 
@@ -150,7 +159,7 @@ class App extends Component {
           todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           ontoggleCompleted={this.toggleCompleted}
-        /> */}
+        />
       </Container>
     );
   }
