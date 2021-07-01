@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
-import shortid from "shortid";
+// import axios from "axios";
+// import shortid from "shortid";
 import Container from "./components/Container";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
@@ -15,6 +15,8 @@ import Modal from "./components/Modal";
 
 import IconButton from "./components/IconButton";
 import { ReactComponent as AddIcon } from "./components/icons/add.svg";
+
+import todosApi from "./components/services/todos-api";
 // import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
@@ -34,16 +36,10 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // console.log("App componentDidMount");
-    // const todos = localStorage.getItem("todos");
-    // const parsedTodos = JSON.parse(todos);
-    // if (parsedTodos) {
-    //   this.setState({ todos: parsedTodos });
-    // }
-
-    axios.get("http://localhost:3000/todos").then((response) => {
-      console.log(response.data);
-    });
+    todosApi
+      .fetchTodos()
+      .then((todos) => this.setState({ todos }))
+      .catch((error) => console.log(error));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,23 +57,26 @@ class App extends Component {
   }
 
   addTodo = (text) => {
-    const todo = {
-      id: shortid.generate(),
+    const todoData = {
       text,
       completed: false,
     };
 
-    this.setState(({ todos }) => ({
-      todos: [todo, ...todos],
-    }));
+    todosApi.addTodo(todoData).then((todo) => {
+      this.setState(({ todos }) => ({
+        todos: [...todos, todo],
+      }));
+    });
 
     // this.toggleModal();
   };
 
   deleteTodo = (todoId) => {
-    this.setState((prevState) => ({
-      todos: prevState.todos.filter((todo) => todo.id !== todoId),
-    }));
+    todosApi.deleteTodo(todoId).then(() => {
+      this.setState(({ todos }) => ({
+        todos: todos.filter(({ id }) => id !== todoId),
+      }));
+    });
   };
 
   changeFilter = (e) => {
@@ -85,12 +84,18 @@ class App extends Component {
   };
 
   toggleCompleted = (todoId) => {
-    console.log(todoId);
-    this.setState(({ todos }) => ({
-      todos: todos.map((todo) =>
-        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
-      ),
-    }));
+    const todo = this.state.todos.find(({ id }) => id === todoId);
+    const { completed } = todo;
+
+    todosApi
+      .updateTodo(todoId, { completed: !completed })
+      .then((updateTodo) => {
+        this.setState(({ todos }) => ({
+          todos: todos.map((todo) =>
+            todo.id === updateTodo.id ? updateTodo : todo
+          ),
+        }));
+      });
   };
 
   formSubmitHandler = (data) => {
