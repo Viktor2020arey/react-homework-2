@@ -5,18 +5,20 @@ import Container from "./components/Container";
 // import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
-import TodoList from "./components/TodoList";
+// import TodoList from "./components/TodoList";
 // import initialTodos from "./todos.json";
 
-import TodoEditor from "./components/TodoEditor";
-import Filter from "./components/TodoList/Filter";
+// import TodoEditor from "./components/TodoEditor";
+// import Filter from "./components/TodoList/Filter";
 
-import Modal from "./components/Modal";
+// import Modal from "./components/Modal";
 
-import IconButton from "./components/IconButton";
-import { ReactComponent as AddIcon } from "./components/icons/add.svg";
+// import IconButton from "./components/IconButton";
+// import { ReactComponent as AddIcon } from "./components/icons/add.svg";
 
 import todosApi from "./components/services/todos-api";
+
+import ArticlesView from "./components/views/";
 // import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
@@ -128,12 +130,12 @@ class App extends Component {
   };
 
   render() {
-    const { todos, filter, showModal } = this.state;
+    // const { todos, filter, showModal } = this.state;
 
-    const totalTodoCount = todos.length;
-    const completedTodoCount = this.calculateCompletedTodos();
+    // const totalTodoCount = todos.length;
+    // const completedTodoCount = this.calculateCompletedTodos();
 
-    const visibleTodos = this.getVisibleTodos();
+    // const visibleTodos = this.getVisibleTodos();
 
     return (
       <Container>
@@ -143,7 +145,7 @@ class App extends Component {
         {/* <Dropdown /> */}
         {/* <Counter initialValue={0} /> */}
 
-        <IconButton onClick={this.toggleModal} aria-label="Добавить тодо">
+        {/* <IconButton onClick={this.toggleModal} aria-label="Добавить тодо">
           <AddIcon width="40" height="40" fill="#fff" />
         </IconButton>
 
@@ -167,7 +169,9 @@ class App extends Component {
           todos={visibleTodos}
           onDeleteTodo={this.deleteTodo}
           ontoggleCompleted={this.toggleCompleted}
-        />
+        /> */}
+
+        <ArticlesView />
       </Container>
     );
   }
