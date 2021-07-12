@@ -5,27 +5,27 @@ import * as actions from "../../redux/actions";
 import Value from "./Value";
 import "./Counter.css";
 
-function Counter({ value, onIcrement, onDecrement }) {
+function Counter({ value, step, onIcrement, onDecrement }) {
   return (
     <div className="Counter">
       <Value value={value} />
-      <Controls onIncrement={onIcrement} onDecrement={onDecrement} />
-      Counter
+      <Controls
+        step={step}
+        onIncrement={() => onIcrement(step)}
+        onDecrement={() => onDecrement(step)}
+      />
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    value: state.counterValue,
-  };
-};
+const mapStateToProps = (state) => ({
+  value: state.counter.value,
+  step: state.counter.step,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onIcrement: () => dispatch(actions.increment(5)),
-    onDecrement: () => dispatch(actions.decrement(5)),
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  onIcrement: (value) => dispatch(actions.increment(value)),
+  onDecrement: (value) => dispatch(actions.decrement(value)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
