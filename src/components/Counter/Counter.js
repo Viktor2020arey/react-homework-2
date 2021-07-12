@@ -1,35 +1,31 @@
 import React from "react";
+import { connect } from "react-redux";
 import Controls from "./Controls";
+import * as actions from "../../redux/actions";
+import Value from "./Value";
 import "./Counter.css";
 
-class Counter extends React.Component {
-  static defaultProps = { initialValue: 0 };
-
-  state = { value: this.props.initialValue };
-
-  handleIncrement = () => {
-    this.setState((prevState) => ({
-      value: prevState.value + 1,
-    }));
-    console.log("Кликнули увеличить");
-  };
-
-  handleDecrement = () => {
-    this.setState((prevState) => ({ value: prevState.value - 1 }));
-    console.log("Кликнули уменшить");
-  };
-  render() {
-    return (
-      <div className="Counter">
-        <span className="Counter__value">{this.state.value}</span>
-
-        <Controls
-          onIncrement={this.handleIncrement}
-          onDecrement={this.handleDecrement}
-        />
-      </div>
-    );
-  }
+function Counter({ value, onIcrement, onDecrement }) {
+  return (
+    <div className="Counter">
+      <Value value={value} />
+      <Controls onIncrement={onIcrement} onDecrement={onDecrement} />
+      Counter
+    </div>
+  );
 }
 
-export default Counter;
+const mapStateToProps = (state) => {
+  return {
+    value: state.counterValue,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIcrement: () => dispatch(actions.increment(5)),
+    onDecrement: () => dispatch(actions.decrement(5)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);

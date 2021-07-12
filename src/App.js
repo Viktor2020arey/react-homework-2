@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import axios from "axios";
 // import shortid from "shortid";
 import Container from "./components/Container";
-// import Counter from "./components/Counter/Counter";
+import Counter from "./components/Counter/Counter";
 // import Dropdown from "./components/Dropdown/Dropdown";
 // import ColorPicker from "./components/ColorPicker";
 // import TodoList from "./components/TodoList";
@@ -18,7 +18,7 @@ import Container from "./components/Container";
 
 import todosApi from "./components/services/todos-api";
 
-import ArticlesView from "./components/views/";
+// import ArticlesView from "./components/views/";
 // import Form from "./components/form";
 // const colorPickerOptions = [
 //   { label: "red", color: "#F44336" },
@@ -143,7 +143,7 @@ class App extends Component {
         {/* <h1>Состояние компонента</h1> */}
         {/* <ColorPicker options={colorPickerOptions} /> */}
         {/* <Dropdown /> */}
-        {/* <Counter initialValue={0} /> */}
+        <Counter initialValue={0} />
 
         {/* <IconButton onClick={this.toggleModal} aria-label="Добавить тодо">
           <AddIcon width="40" height="40" fill="#fff" />
@@ -171,7 +171,7 @@ class App extends Component {
           ontoggleCompleted={this.toggleCompleted}
         /> */}
 
-        <ArticlesView />
+        {/* <ArticlesView /> */}
       </Container>
     );
   }
